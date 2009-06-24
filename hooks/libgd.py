@@ -7,4 +7,9 @@ def pre_configure(options, buildout):
                   options['compile-directory']
               )
              )
+    os.system("""cd %s;
+              autoreconf -iv""" % (
+                  options['compile-directory']
+              )
+             ) 
 
