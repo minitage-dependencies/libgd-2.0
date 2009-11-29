@@ -1,0 +1,12 @@
+diff -ur gd-2.0.35/gdkanji.c gd-2.0.35.new/gdkanji.c
+--- gd-2.0.35/gdkanji.c	2006-04-05 17:55:57.000000000 +0200
++++ gd-2.0.35.new/gdkanji.c	2009-11-29 12:50:44.687500000 +0100
+@@ -24,7 +24,7 @@
+ typedef void *iconv_t;
+ #endif
+ 
+-#ifndef HAVE_ICONV
++#ifndef HAVE_ICONV_H
+ #define ICONV_CONST /**/
+   iconv_t iconv_open (const char *, const char *);
+ size_t iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *);
