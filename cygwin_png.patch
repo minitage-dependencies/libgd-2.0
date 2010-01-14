@@ -1,3 +1,4 @@
+Only in gd-2.0.35.new/: .configure.ac.swp
 diff -ur gd-2.0.35/Makefile.am gd-2.0.35.new/Makefile.am
 --- gd-2.0.35/Makefile.am	2007-03-05 16:42:16.000000000 +0100
 +++ gd-2.0.35.new/Makefile.am	2010-01-14 01:23:57.218750000 +0100
@@ -47,75 +48,17 @@ diff -ur gd-2.0.35/Makefile.in gd-2.0.35.new/Makefile.in
  install-binPROGRAMS: $(bin_PROGRAMS)
  	@$(NORMAL_INSTALL)
  	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
-diff -ur gd-2.0.35/configure gd-2.0.35.new/configure
---- gd-2.0.35/configure	2007-04-23 16:57:52.000000000 +0200
-+++ gd-2.0.35.new/configure	2010-01-13 23:21:39.468750000 +0100
-@@ -22338,13 +22338,13 @@
-   LDFLAGS="$libpng_LDFLAGS $LDFLAGS"
- 
-   if test -n "$LIBPNG12_CONFIG"; then
--    { echo "$as_me:$LINENO: checking for png_create_read_struct in -lpng12" >&5
--echo $ECHO_N "checking for png_create_read_struct in -lpng12... $ECHO_C" >&6; }
-+    { echo "$as_me:$LINENO: checking for png_create_read_struct in -lpng-3" >&5
-+echo $ECHO_N "checking for png_create_read_struct in -lpng-3... $ECHO_C" >&6; }
- if test "${ac_cv_lib_png12_png_create_read_struct+set}" = set; then
-   echo $ECHO_N "(cached) $ECHO_C" >&6
- else
-   ac_check_lib_save_LIBS=$LIBS
--LIBS="-lpng12  $LIBS"
-+LIBS="-lpng-3  $LIBS"
- cat >conftest.$ac_ext <<_ACEOF
- /* confdefs.h.  */
- _ACEOF
-@@ -22400,7 +22400,7 @@
- { echo "$as_me:$LINENO: result: $ac_cv_lib_png12_png_create_read_struct" >&5
- echo "${ECHO_T}$ac_cv_lib_png12_png_create_read_struct" >&6; }
- if test $ac_cv_lib_png12_png_create_read_struct = yes; then
--  LIBS="-lpng12 $LIBS"
-+  LIBS="-lpng-3 $LIBS"
-        FEATURES="GD_PNG $FEATURES"
- 
- cat >>confdefs.h <<\_ACEOF
 diff -ur gd-2.0.35/configure.ac gd-2.0.35.new/configure.ac
 --- gd-2.0.35/configure.ac	2007-04-25 14:48:41.000000000 +0200
-+++ gd-2.0.35.new/configure.ac	2010-01-14 00:54:04.156250000 +0100
-@@ -355,12 +355,12 @@
-   if test -n "$LIBPNG12_CONFIG"; then
-     libpng_CPPFLAGS=`libpng12-config --cflags`
-     # should be --ldopts, but it's currently broken
--    libpng_LDFLAGS=`libpng12-config --ldflags`
-+    libpng_LDFLAGS=-lpng-3
-     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
-   elif test -n "$LIBPNG_CONFIG"; then
-     libpng_CPPFLAGS=`libpng-config --cflags`
-     # should be --ldopts, but it's currently broken
--    libpng_LDFLAGS=`libpng-config --ldflags`
-+    libpng_LDFLAGS=-lpng-3
-     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
-   elif test -d "$withval"; then
-     libpng_CPPFLAGS="-I$withval/include"
-@@ -377,21 +377,21 @@
++++ gd-2.0.35.new/configure.ac	2010-01-14 10:59:42.234375000 +0100
+@@ -407,6 +407,10 @@
+ if test "$ac_cv_lib_png12_png_create_read_struct" = yes; then
+   ac_cv_lib_png_png_create_read_struct=yes
+ fi 
++if test "$ac_cv_lib_png_3_png_create_read_struct" = yes; then
++  ac_cv_lib_png_png_create_read_struct=yes
++fi 
++
  
-   if test -n "$LIBPNG12_CONFIG"; then
-     AC_CHECK_LIB(png12,png_create_read_struct,
--      [LIBS="-lpng12 $LIBS"
-+      [LIBS="-lpng-3 $LIBS"
-        FEATURES="GD_PNG $FEATURES"
-        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-       [LDFLAGS="$_ldflags"  
-        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
-   elif test -n "$LIBPNG_CONFIG"; then
-     AC_CHECK_LIB(png,png_create_read_struct,
--      [LIBS="-lpng $LIBS" 
-+      [LIBS="-lpng-3 $LIBS" 
-        FEATURES="GD_PNG $FEATURES"
-        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-       [LDFLAGS="$_ldflags"  
-        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
-   else
-     AC_CHECK_LIB(png,png_create_read_struct,
--      [LIBS="-lpng $LIBS" 
-+      [LIBS="-lpng-3 $LIBS" 
-        FEATURES="GD_PNG $FEATURES"
-        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
-       [LDFLAGS="$_ldflags"  
+ dnl FreeType configure tests snarfed from libwmf ..
+ AC_ARG_WITH(freetype,dnl
