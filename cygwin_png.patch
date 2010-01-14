@@ -1,20 +1,69 @@
+diff -ur gd-2.0.35/Makefile.am gd-2.0.35.new/Makefile.am
+--- gd-2.0.35/Makefile.am	2007-03-05 16:42:16.000000000 +0100
++++ gd-2.0.35.new/Makefile.am	2010-01-14 01:23:57.218750000 +0100
+@@ -19,9 +19,9 @@
+ 
+ libgd_la_SOURCES = gd.c gdfx.c gd_security.c gd_gd.c gd_gd2.c gd_io.c gd_io_dp.c gd_gif_in.c gd_gif_out.c gd_io_file.c gd_io_ss.c gd_jpeg.c gd_png.c gd_ss.c gd_topal.c gd_wbmp.c gdcache.c gdfontg.c gdfontl.c gdfontmb.c gdfonts.c gdfontt.c gdft.c gdhelpers.c gdhelpers.h gdkanji.c gdtables.c gdxpm.c jisx0208.h wbmp.c wbmp.h
+ 
+-libgd_la_LDFLAGS = -version-info 2:0:0 $(XTRA_LDFLAGS)
++libgd_la_LDFLAGS = -version-info 2:0:0 -no-undefined $(XTRA_LDFLAGS) -no-undefined 
+ 
+-libgd_la_LIBADD = $(LTLIBICONV)
++libgd_la_LIBADD = $(LTLIBICONV) -lpng
+ 
+ LDADD = ./libgd.la $(LIBICONV)
+ 
+diff -ur gd-2.0.35/Makefile.in gd-2.0.35.new/Makefile.in
+--- gd-2.0.35/Makefile.in	2007-04-23 16:57:51.000000000 +0200
++++ gd-2.0.35.new/Makefile.in	2010-01-14 01:34:06.765625000 +0100
+@@ -183,7 +183,7 @@
+ 	$(AM_CFLAGS) $(CFLAGS)
+ CCLD = $(CC)
+ LINK = $(LIBTOOL) --tag=CC --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+-	$(AM_LDFLAGS) $(LDFLAGS) -o $@
++	$(AM_LDFLAGS) $(LDFLAGS) -o $@ -no-undefined
+ SOURCES = $(libgd_la_SOURCES) annotate.c circletexttest.c \
+ 	fontconfigtest.c fontsizetest.c fontwheeltest.c gd2copypal.c \
+ 	gd2time.c gd2togif.c gd2topng.c gdcmpgif.c gddemo.c \
+@@ -345,9 +345,9 @@
+ include_HEADERS = gd.h gdfx.h gd_io.h gdcache.h gdfontg.h gdfontl.h gdfontmb.h gdfonts.h gdfontt.h entities.h
+ lib_LTLIBRARIES = libgd.la
+ libgd_la_SOURCES = gd.c gdfx.c gd_security.c gd_gd.c gd_gd2.c gd_io.c gd_io_dp.c gd_gif_in.c gd_gif_out.c gd_io_file.c gd_io_ss.c gd_jpeg.c gd_png.c gd_ss.c gd_topal.c gd_wbmp.c gdcache.c gdfontg.c gdfontl.c gdfontmb.c gdfonts.c gdfontt.c gdft.c gdhelpers.c gdhelpers.h gdkanji.c gdtables.c gdxpm.c jisx0208.h wbmp.c wbmp.h
+-libgd_la_LDFLAGS = -version-info 2:0:0 $(XTRA_LDFLAGS)
+-libgd_la_LIBADD = $(LTLIBICONV)
+-LDADD = ./libgd.la $(LIBICONV)
++libgd_la_LDFLAGS = -version-info 2:0:0 $(XTRA_LDFLAGS) -no-undefined
++libgd_la_LIBADD = $(LTLIBICONV) -no-undefined -lpng
++LDADD = ./libgd.la $(LIBICONV) -lpng
+ all: config.h
+ 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
+ 
+@@ -431,7 +431,7 @@
+ 	  rm -f "$${dir}/so_locations"; \
+ 	done
+ libgd.la: $(libgd_la_OBJECTS) $(libgd_la_DEPENDENCIES) 
+-	$(LINK) -rpath $(libdir) $(libgd_la_LDFLAGS) $(libgd_la_OBJECTS) $(libgd_la_LIBADD) $(LIBS)
++	$(LINK) -rpath $(libdir) $(libgd_la_LDFLAGS) $(libgd_la_OBJECTS) $(libgd_la_LIBADD) $(LIBS) -lpng -no-undefined
+ install-binPROGRAMS: $(bin_PROGRAMS)
+ 	@$(NORMAL_INSTALL)
+ 	test -z "$(bindir)" || $(mkdir_p) "$(DESTDIR)$(bindir)"
 diff -ur gd-2.0.35/configure gd-2.0.35.new/configure
 --- gd-2.0.35/configure	2007-04-23 16:57:52.000000000 +0200
-+++ gd-2.0.35.new/configure	2010-01-13 22:05:46.390625000 +0100
++++ gd-2.0.35.new/configure	2010-01-13 23:21:39.468750000 +0100
 @@ -22338,13 +22338,13 @@
    LDFLAGS="$libpng_LDFLAGS $LDFLAGS"
  
    if test -n "$LIBPNG12_CONFIG"; then
 -    { echo "$as_me:$LINENO: checking for png_create_read_struct in -lpng12" >&5
 -echo $ECHO_N "checking for png_create_read_struct in -lpng12... $ECHO_C" >&6; }
-+    { echo "$as_me:$LINENO: checking for png_create_read_struct in -lpng12-0" >&5
-+echo $ECHO_N "checking for png_create_read_struct in -lpng12-0... $ECHO_C" >&6; }
++    { echo "$as_me:$LINENO: checking for png_create_read_struct in -lpng-3" >&5
++echo $ECHO_N "checking for png_create_read_struct in -lpng-3... $ECHO_C" >&6; }
  if test "${ac_cv_lib_png12_png_create_read_struct+set}" = set; then
    echo $ECHO_N "(cached) $ECHO_C" >&6
  else
    ac_check_lib_save_LIBS=$LIBS
 -LIBS="-lpng12  $LIBS"
-+LIBS="-lpng12-0  $LIBS"
++LIBS="-lpng-3  $LIBS"
  cat >conftest.$ac_ext <<_ACEOF
  /* confdefs.h.  */
  _ACEOF
@@ -23,7 +72,50 @@ diff -ur gd-2.0.35/configure gd-2.0.35.new/configure
  echo "${ECHO_T}$ac_cv_lib_png12_png_create_read_struct" >&6; }
  if test $ac_cv_lib_png12_png_create_read_struct = yes; then
 -  LIBS="-lpng12 $LIBS"
-+  LIBS="-lpng12-0 $LIBS"
++  LIBS="-lpng-3 $LIBS"
         FEATURES="GD_PNG $FEATURES"
  
  cat >>confdefs.h <<\_ACEOF
+diff -ur gd-2.0.35/configure.ac gd-2.0.35.new/configure.ac
+--- gd-2.0.35/configure.ac	2007-04-25 14:48:41.000000000 +0200
++++ gd-2.0.35.new/configure.ac	2010-01-14 00:54:04.156250000 +0100
+@@ -355,12 +355,12 @@
+   if test -n "$LIBPNG12_CONFIG"; then
+     libpng_CPPFLAGS=`libpng12-config --cflags`
+     # should be --ldopts, but it's currently broken
+-    libpng_LDFLAGS=`libpng12-config --ldflags`
++    libpng_LDFLAGS=-lpng-3
+     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
+   elif test -n "$LIBPNG_CONFIG"; then
+     libpng_CPPFLAGS=`libpng-config --cflags`
+     # should be --ldopts, but it's currently broken
+-    libpng_LDFLAGS=`libpng-config --ldflags`
++    libpng_LDFLAGS=-lpng-3
+     libpng_LDFLAGS=`echo " $libpng_LDFLAGS" | sed 's/ -l[[^ ]][[^ ]]*//g'`
+   elif test -d "$withval"; then
+     libpng_CPPFLAGS="-I$withval/include"
+@@ -377,21 +377,21 @@
+ 
+   if test -n "$LIBPNG12_CONFIG"; then
+     AC_CHECK_LIB(png12,png_create_read_struct,
+-      [LIBS="-lpng12 $LIBS"
++      [LIBS="-lpng-3 $LIBS"
+        FEATURES="GD_PNG $FEATURES"
+        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
+       [LDFLAGS="$_ldflags"  
+        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
+   elif test -n "$LIBPNG_CONFIG"; then
+     AC_CHECK_LIB(png,png_create_read_struct,
+-      [LIBS="-lpng $LIBS" 
++      [LIBS="-lpng-3 $LIBS" 
+        FEATURES="GD_PNG $FEATURES"
+        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
+       [LDFLAGS="$_ldflags"  
+        AC_MSG_WARN([libpng is required - see http://www.libpng.org/pub/png/])])
+   else
+     AC_CHECK_LIB(png,png_create_read_struct,
+-      [LIBS="-lpng $LIBS" 
++      [LIBS="-lpng-3 $LIBS" 
+        FEATURES="GD_PNG $FEATURES"
+        AC_DEFINE(HAVE_LIBPNG, 1, [ Define if you have the png library. ])],
+       [LDFLAGS="$_ldflags"  
